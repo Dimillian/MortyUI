@@ -21,7 +21,7 @@ This is all an excercice for me to play a bit with GraphQL + SwiftUI. Nothing ve
   </tr>
   <tr>
     <td><img src="Screenshots/characters.png"></td>
-    <td><img src="screenshots/character.png"></td>
-    <td><img src="screenshots/episode.png"></td>
+    <td><img src="Screenshots/character.png"></td>
+    <td><img src="Screenshots/episode.png"></td>
   </tr>
  </table>
