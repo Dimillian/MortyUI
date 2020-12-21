@@ -1,0 +1,76 @@
+query GetCharacters($page: Int) {
+	characters(page: $page) {
+		info {
+			pages, count
+		}
+		results {
+			id, name, image,
+			episode {
+				id, name
+			}
+		}
+	}
+}
+
+query GetCharacter($id: ID!){
+	character(id: $id) {
+		id, name, image, status, species, type, gender
+		episode {
+			id, name, air_date
+		}
+		location {
+			id, name
+		}
+		origin {
+			name
+		}
+	}
+}
+
+query GetEpisodes($page: Int){
+	episodes(page: $page) {
+		info {
+			count, pages
+		}
+		results {
+			id, name, created, air_date, episode
+			characters {
+				name, image
+			}
+		}
+	}
+}
+
+query GetEpisode($id: ID!) {
+	episode(id: $id) {
+		id, name, air_date, episode,
+		characters {
+			id, name, image
+		}
+	}
+}
+
+query GetLocations($page: Int) {
+	locations(page: $page) {
+		info {
+			count, pages
+		}
+		results {
+			id, name, type, dimension,
+			residents {
+				id, name, image
+			}
+		}
+	}
+}
+
+query GetLocation($id: ID!) {
+	location(id: $id) {
+		id, name, type, dimension,
+		residents {
+			id, name, image
+		}
+	}
+}
+
+
