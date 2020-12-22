@@ -38,6 +38,7 @@ struct CharacterDetailView: View {
             }
             
             infoSection
+            locationSection
 
             if let episodes = query.data?.character?.episode?.compactMap{ $0 } {
                 Section(header: Text("Episodes")) {
@@ -74,14 +75,30 @@ struct CharacterDetailView: View {
                     InfoRowView(label: "Status",
                                 icon: "waveform.path.ecg.rectangle",
                                 value: query.data?.character?.status ?? "loading...")
+                })
+            .redacted(reason: query.data?.character == nil ? .placeholder : [])
+    }
+    
+    private var locationSection: some View {
+        Section(header: Text("Location")) {
+            NavigationLink(
+                destination:
+                    LocationDetailView(id: query.data?.character?.location?.id ?? GraphQLID(0)),
+                label: {
                     InfoRowView(label: "Location",
                                 icon: "map",
                                 value: query.data?.character?.location?.name ?? "loading...")
+                })
+            NavigationLink(
+                destination:
+                    LocationDetailView(id: query.data?.character?.origin?.id ?? GraphQLID(0)),
+                label: {
                     InfoRowView(label: "Origin",
                                 icon: "paperplane",
                                 value: query.data?.character?.origin?.name ?? "loading...")
                 })
-            .redacted(reason: query.data?.character == nil ? .placeholder : [])
+        }
+        .redacted(reason: query.data?.character == nil ? .placeholder : [])
     }
 }
 

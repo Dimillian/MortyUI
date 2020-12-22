@@ -16,9 +16,9 @@ struct TabbarView: View {
                 }
             EpisodesListView()
                 .tabItem {
-                Label("Episodes", systemImage: "tv")
-            }
-            Text("Locations")
+                    Label("Episodes", systemImage: "tv")
+                }
+            LocationsListView()
                 .tabItem {
                     Label("Locations", systemImage: "map")
                 }

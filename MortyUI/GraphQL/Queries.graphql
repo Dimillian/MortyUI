@@ -22,7 +22,7 @@ query GetCharacter($id: ID!){
 			id, name
 		}
 		origin {
-			name
+			id, name
 		}
 	}
 }

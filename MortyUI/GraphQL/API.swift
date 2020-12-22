@@ -326,6 +326,7 @@ public final class GetCharacterQuery: GraphQLQuery {
         }
         origin {
           __typename
+          id
           name
         }
       }
@@ -631,6 +632,7 @@ public final class GetCharacterQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
             GraphQLField("name", type: .scalar(String.self)),
           ]
         }
@@ -641,8 +643,8 @@ public final class GetCharacterQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
-        public init(name: String? = nil) {
-          self.init(unsafeResultMap: ["__typename": "Location", "name": name])
+        public init(id: GraphQLID? = nil, name: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Location", "id": id, "name": name])
         }
 
         public var __typename: String {
@@ -651,6 +653,16 @@ public final class GetCharacterQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the location.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
           }
         }
 
