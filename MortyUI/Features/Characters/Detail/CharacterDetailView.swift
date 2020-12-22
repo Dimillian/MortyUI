@@ -10,16 +10,18 @@ import Apollo
 import KingfisherSwiftUI
 
 struct CharacterDetailView: View {
-    public let id: GraphQLID
+    @StateObject private var query: SingleQuery<GetCharacterQuery>
     
-    @StateObject private var data = CharacterDetailViewModel()
+    init(id: GraphQLID) {
+        _query = StateObject(wrappedValue: SingleQuery(query: GetCharacterQuery(id: id)))
+    }
     
     var body: some View {
         List {
             Section(header: Text("Mugshot")) {
                 HStack {
                     Spacer()
-                    if let image = data.character?.image,
+                    if let image = query.data?.character?.image,
                        let url = URL(string: image) {
                         KFImage(url)
                             .resizable()
@@ -37,7 +39,7 @@ struct CharacterDetailView: View {
             
             infoSection
 
-            if let episodes = data.character?.episode?.compactMap{ $0 } {
+            if let episodes = query.data?.character?.episode?.compactMap{ $0 } {
                 Section(header: Text("Episodes")) {
                     ForEach(episodes, id: \.id) { episode in
                         NavigationLink(
@@ -57,10 +59,7 @@ struct CharacterDetailView: View {
             
         }
         .listStyle(GroupedListStyle())
-        .navigationTitle(data.character?.name ?? "Loading...")
-        .onAppear {
-            data.id = id
-        }
+        .navigationTitle(query.data?.character?.name ?? "Loading...")
     }
     
     private var infoSection: some View {
@@ -68,21 +67,21 @@ struct CharacterDetailView: View {
                 content: {
                     InfoRowView(label: "Species",
                                 icon: "hare",
-                                value: data.character?.species ?? "loading...")
+                                value: query.data?.character?.species ?? "loading...")
                     InfoRowView(label: "Gender",
                                 icon: "eyes",
-                                value: data.character?.gender ?? "loading...")
+                                value: query.data?.character?.gender ?? "loading...")
                     InfoRowView(label: "Status",
                                 icon: "waveform.path.ecg.rectangle",
-                                value: data.character?.status ?? "loading...")
+                                value: query.data?.character?.status ?? "loading...")
                     InfoRowView(label: "Location",
                                 icon: "map",
-                                value: data.character?.location?.name ?? "loading...")
+                                value: query.data?.character?.location?.name ?? "loading...")
                     InfoRowView(label: "Origin",
                                 icon: "paperplane",
-                                value: data.character?.origin?.name ?? "loading...")
+                                value: query.data?.character?.origin?.name ?? "loading...")
                 })
-            .redacted(reason: data.character == nil ? .placeholder : [])
+            .redacted(reason: query.data?.character == nil ? .placeholder : [])
     }
 }
 

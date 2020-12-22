@@ -10,25 +10,27 @@ import Apollo
 import KingfisherSwiftUI
 
 struct EpisodeDetailView: View {
-    public let id: GraphQLID
+    @StateObject private var query: SingleQuery<GetEpisodeQuery>
     
-    @StateObject private var data = EpisodeDetailViewModel()
+    init(id: GraphQLID) {
+        _query = StateObject(wrappedValue: SingleQuery(query: GetEpisodeQuery(id: id)))
+    }
     
     var body: some View {
         List {
             Section(header: Text("Info")) {
                 InfoRowView(label: "Name",
                             icon: "info",
-                            value: data.episode?.name ?? "loading...")
+                            value: query.data?.episode?.name ?? "loading...")
                 InfoRowView(label: "Air date",
                             icon: "calendar",
-                            value: data.episode?.airDate ?? "loading...")
+                            value: query.data?.episode?.airDate ?? "loading...")
                 InfoRowView(label: "Code",
                             icon: "barcode",
-                            value: data.episode?.episode ?? "loading...")
-            }.redacted(reason: data.episode == nil ? .placeholder : [])
+                            value: query.data?.episode?.episode ?? "loading...")
+            }.redacted(reason: query.data?.episode == nil ? .placeholder : [])
             
-            if let characters = data.episode?.characters?.compactMap{ $0 } {
+            if let characters = query.data?.episode?.characters?.compactMap{ $0 } {
                 Section(header: Text("Characters")) {
                     ForEach(characters, id: \.id) { character in
                         NavigationLink(
@@ -51,9 +53,6 @@ struct EpisodeDetailView: View {
             }
         }
         .listStyle(GroupedListStyle())
-        .onAppear {
-            data.id = id
-        }
     }
 }
 

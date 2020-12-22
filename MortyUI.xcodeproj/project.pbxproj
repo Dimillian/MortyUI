@@ -11,10 +11,10 @@
 		69A120222590EC9D0073E76F /* EpisodesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A120212590EC9D0073E76F /* EpisodesListView.swift */; };
 		69A120262590ECB00073E76F /* EpisodesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A120252590ECB00073E76F /* EpisodesListViewModel.swift */; };
 		69A120292590ED4B0073E76F /* EpisodesListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A120282590ED4B0073E76F /* EpisodesListRowView.swift */; };
+		69A1202F2591E00E0073E76F /* SingleQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A1202E2591E00E0073E76F /* SingleQuery.swift */; };
 		69C794562590ADDB008EF633 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C794552590ADDB008EF633 /* Color.swift */; };
 		69C794722590CB7A008EF633 /* CharactersListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C794712590CB7A008EF633 /* CharactersListRowView.swift */; };
 		69C794772590D541008EF633 /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C794762590D541008EF633 /* EpisodeDetailView.swift */; };
-		69C7947C2590D553008EF633 /* EpisodeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C7947B2590D553008EF633 /* EpisodeDetailViewModel.swift */; };
 		69F9DCEB258CB21300F99396 /* MortyUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9DCEA258CB21300F99396 /* MortyUIApp.swift */; };
 		69F9DCEF258CB21500F99396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69F9DCEE258CB21500F99396 /* Assets.xcassets */; };
 		69F9DCF2258CB21500F99396 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69F9DCF1258CB21500F99396 /* Preview Assets.xcassets */; };
@@ -28,7 +28,6 @@
 		69F9DD1F258E204F00F99396 /* CharactersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9DD1E258E204F00F99396 /* CharactersListView.swift */; };
 		69F9DD23258E206400F99396 /* CharactersListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9DD22258E206400F99396 /* CharactersListViewModel.swift */; };
 		69F9DD2A258E243000F99396 /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9DD29258E243000F99396 /* CharacterDetailView.swift */; };
-		69F9DD2D258E244D00F99396 /* CharacterDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9DD2C258E244D00F99396 /* CharacterDetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,10 +35,10 @@
 		69A120212590EC9D0073E76F /* EpisodesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesListView.swift; sourceTree = "<group>"; };
 		69A120252590ECB00073E76F /* EpisodesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesListViewModel.swift; sourceTree = "<group>"; };
 		69A120282590ED4B0073E76F /* EpisodesListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesListRowView.swift; sourceTree = "<group>"; };
+		69A1202E2591E00E0073E76F /* SingleQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleQuery.swift; sourceTree = "<group>"; };
 		69C794552590ADDB008EF633 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		69C794712590CB7A008EF633 /* CharactersListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListRowView.swift; sourceTree = "<group>"; };
 		69C794762590D541008EF633 /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
-		69C7947B2590D553008EF633 /* EpisodeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewModel.swift; sourceTree = "<group>"; };
 		69F9DCE7258CB21300F99396 /* MortyUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MortyUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69F9DCEA258CB21300F99396 /* MortyUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MortyUIApp.swift; sourceTree = "<group>"; };
 		69F9DCEE258CB21500F99396 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -53,7 +52,6 @@
 		69F9DD1E258E204F00F99396 /* CharactersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListView.swift; sourceTree = "<group>"; };
 		69F9DD22258E206400F99396 /* CharactersListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListViewModel.swift; sourceTree = "<group>"; };
 		69F9DD29258E243000F99396 /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
-		69F9DD2C258E244D00F99396 /* CharacterDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +106,6 @@
 			isa = PBXGroup;
 			children = (
 				69C794762590D541008EF633 /* EpisodeDetailView.swift */,
-				69C7947B2590D553008EF633 /* EpisodeDetailViewModel.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -157,6 +154,7 @@
 			children = (
 				69F9DD06258CB4B300F99396 /* API.swift */,
 				69F9DD09258CB58900F99396 /* Network.swift */,
+				69A1202E2591E00E0073E76F /* SingleQuery.swift */,
 				69F9DCFE258CB3E200F99396 /* schema.json */,
 				69F9DD01258CB40400F99396 /* Queries.graphql */,
 			);
@@ -204,7 +202,6 @@
 			isa = PBXGroup;
 			children = (
 				69F9DD29258E243000F99396 /* CharacterDetailView.swift */,
-				69F9DD2C258E244D00F99396 /* CharacterDetailViewModel.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -316,14 +313,13 @@
 				69F9DD23258E206400F99396 /* CharactersListViewModel.swift in Sources */,
 				69F9DD0A258CB58900F99396 /* Network.swift in Sources */,
 				69F9DD1A258E1F3900F99396 /* TabbarView.swift in Sources */,
+				69A1202F2591E00E0073E76F /* SingleQuery.swift in Sources */,
 				69C794722590CB7A008EF633 /* CharactersListRowView.swift in Sources */,
-				69F9DD2D258E244D00F99396 /* CharacterDetailViewModel.swift in Sources */,
 				69F9DCEB258CB21300F99396 /* MortyUIApp.swift in Sources */,
 				69C794772590D541008EF633 /* EpisodeDetailView.swift in Sources */,
 				69F9DD2A258E243000F99396 /* CharacterDetailView.swift in Sources */,
 				69C794562590ADDB008EF633 /* Color.swift in Sources */,
 				69A120222590EC9D0073E76F /* EpisodesListView.swift in Sources */,
-				69C7947C2590D553008EF633 /* EpisodeDetailViewModel.swift in Sources */,
 				69A120292590ED4B0073E76F /* EpisodesListRowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
