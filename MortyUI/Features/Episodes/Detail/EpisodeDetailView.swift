@@ -16,21 +16,25 @@ struct EpisodeDetailView: View {
         _query = StateObject(wrappedValue: SingleQuery(query: GetEpisodeQuery(id: id)))
     }
     
+    var episode: EpisodeDetail? {
+        query.data?.episode?.fragments.episodeDetail
+    }
+    
     var body: some View {
         List {
             Section(header: Text("Info")) {
                 InfoRowView(label: "Name",
                             icon: "info",
-                            value: query.data?.episode?.name ?? "loading...")
+                            value: episode?.name ?? "loading...")
                 InfoRowView(label: "Air date",
                             icon: "calendar",
-                            value: query.data?.episode?.airDate ?? "loading...")
+                            value: episode?.airDate ?? "loading...")
                 InfoRowView(label: "Code",
                             icon: "barcode",
-                            value: query.data?.episode?.episode ?? "loading...")
-            }.redacted(reason: query.data?.episode == nil ? .placeholder : [])
+                            value: episode?.episode ?? "loading...")
+            }.redacted(reason: episode == nil ? .placeholder : [])
             
-            if let characters = query.data?.episode?.characters?.compactMap{ $0 } {
+            if let characters = episode?.characters?.compactMap{ $0 } {
                 Section(header: Text("Characters")) {
                     ForEach(characters, id: \.id) { character in
                         NavigationLink(

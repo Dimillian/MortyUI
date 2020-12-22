@@ -10,12 +10,12 @@ import SwiftUI
 import Apollo
 
 class EpisodesListViewModel: ObservableObject {
-    @Published public var episodes: [GetEpisodesQuery.Data.Episode.Result]?
-    public var placeholders = Array(repeating: GetEpisodesQuery.Data.Episode.Result(id: GraphQLID(0),
-                                                                                    name: nil,
-                                                                                    created: nil,
-                                                                                    airDate: nil,
-                                                                                    characters: nil), count: 10)
+    @Published public var episodes: [EpisodeDetail]?
+    public var placeholders = Array(repeating: EpisodeDetail(id: GraphQLID(0),
+                                                             name: nil,
+                                                             created: nil,
+                                                             airDate: nil,
+                                                             characters: nil), count: 10)
     
     public var currentPage = 1 {
         didSet {
@@ -41,11 +41,11 @@ class EpisodesListViewModel: ObservableObject {
             switch result {
             case .success(let result):
                 if fetchedPage > 1 {
-                    if let newEpisodes = result.data?.episodes?.results?.compactMap({ $0 }) {
+                    if let newEpisodes = result.data?.episodes?.results?.compactMap({ $0?.fragments.episodeDetail }) {
                         self?.episodes?.append(contentsOf: newEpisodes)
                     }
                 } else {
-                    self?.episodes = result.data?.episodes?.results?.compactMap{ $0 }
+                    self?.episodes = result.data?.episodes?.results?.compactMap{ $0?.fragments.episodeDetail }
                 }
                 self?.totalPage = result.data?.episodes?.info?.pages
                 self?.totalCharacters = result.data?.episodes?.info?.count

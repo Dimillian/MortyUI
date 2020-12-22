@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EpisodesListRowView: View {
-    let episode: GetEpisodesQuery.Data.Episode.Result
+    let episode: EpisodeDetail
     
     var body: some View {
         HStack(alignment: .center) {

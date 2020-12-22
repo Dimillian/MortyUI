@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LocationsListRowView: View {
-    let location: GetLocationsQuery.Data.Location.Result
+    let location: LocationDetail
     
     var body: some View {
         HStack(alignment: .center) {

@@ -33,20 +33,14 @@ query GetEpisodes($page: Int){
 			count, pages
 		}
 		results {
-			id, name, created, air_date, episode
-			characters {
-				name, image
-			}
+			...EpisodeDetail
 		}
 	}
 }
 
 query GetEpisode($id: ID!) {
 	episode(id: $id) {
-		id, name, air_date, episode,
-		characters {
-			id, name, image
-		}
+		...EpisodeDetail
 	}
 }
 
@@ -56,20 +50,28 @@ query GetLocations($page: Int) {
 			count, pages
 		}
 		results {
-			id, name, type, dimension,
-			residents {
-				id, name, image
-			}
+			...LocationDetail
 		}
 	}
 }
 
 query GetLocation($id: ID!) {
 	location(id: $id) {
-		id, name, type, dimension,
-		residents {
-			id, name, image
-		}
+		...LocationDetail
+	}
+}
+
+fragment LocationDetail on Location {
+	id, name, type, dimension,
+	residents {
+		id, name, image
+	}
+}
+
+fragment EpisodeDetail on Episode {
+	id, name, created, air_date, episode
+	characters {
+		id, name, image
 	}
 }
 

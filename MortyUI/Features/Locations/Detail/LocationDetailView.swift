@@ -12,6 +12,10 @@ import KingfisherSwiftUI
 struct LocationDetailView: View {
     @StateObject private var query: SingleQuery<GetLocationQuery>
     
+    var location: LocationDetail? {
+        query.data?.location?.fragments.locationDetail
+    }
+    
     init(id: GraphQLID) {
         _query = StateObject(wrappedValue: SingleQuery(query: GetLocationQuery(id: id)))
     }
@@ -21,16 +25,16 @@ struct LocationDetailView: View {
             Section(header: Text("Info")) {
                 InfoRowView(label: "Name",
                             icon: "info",
-                            value: query.data?.location?.name ?? "loading...")
+                            value: location?.name ?? "loading...")
                 InfoRowView(label: "Dimension",
                             icon: "tornado",
-                            value: query.data?.location?.dimension ?? "loading...")
+                            value: location?.dimension ?? "loading...")
                 InfoRowView(label: "Type",
                             icon: "newspaper",
-                            value: query.data?.location?.type ?? "loading...")
+                            value: location?.type ?? "loading...")
             }.redacted(reason: query.data?.location == nil ? .placeholder : [])
             
-            if let characters = query.data?.location?.residents?.compactMap{ $0 } {
+            if let characters = location?.residents?.compactMap{ $0 } {
                 Section(header: Text("Residents")) {
                     ForEach(characters, id: \.id) { character in
                         NavigationLink(
@@ -53,7 +57,7 @@ struct LocationDetailView: View {
             }
         }
         .listStyle(GroupedListStyle())
-        .navigationTitle(query.data?.location?.name ?? "")
+        .navigationTitle(location?.name ?? "")
     }
 }
 
