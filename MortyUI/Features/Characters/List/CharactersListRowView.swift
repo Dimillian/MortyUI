@@ -9,7 +9,7 @@ import SwiftUI
 import KingfisherSwiftUI
 
 struct CharactersListRowView: View {
-    let character: GetCharactersQuery.Data.Character.Result
+    let character: CharacterSmall
     
     var body: some View {
         HStack {

@@ -22,6 +22,10 @@ struct TabbarView: View {
                 .tabItem {
                     Label("Locations", systemImage: "map")
                 }
+            SearchView()
+                .tabItem {
+                    Label("Seach", systemImage: "magnifyingglass")
+                }
         }
     }
 }

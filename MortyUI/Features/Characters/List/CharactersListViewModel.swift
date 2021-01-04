@@ -10,11 +10,11 @@ import SwiftUI
 import Apollo
 
 class CharacterListViewModel: ObservableObject {
-    @Published public var characters: [GetCharactersQuery.Data.Character.Result]?
-    public var placeholders = Array(repeating: GetCharactersQuery.Data.Character.Result(id: GraphQLID(0),
-                                                                                        name: nil,
-                                                                                        image: nil,
-                                                                                        episode: nil), count: 10)
+    @Published public var characters: [CharacterSmall]?
+    public var placeholders = Array(repeating: CharacterSmall(id: GraphQLID(0),
+                                                              name: nil,
+                                                              image: nil,
+                                                              episode: nil), count: 10)
     
     public var currentPage = 1 {
         didSet {
@@ -40,11 +40,11 @@ class CharacterListViewModel: ObservableObject {
             switch result {
             case .success(let result):
                 if fetchedPage > 1 {
-                    if let newCharacters = result.data?.characters?.results?.compactMap({ $0 }) {
+                    if let newCharacters = result.data?.characters?.results?.compactMap({ $0?.fragments.characterSmall }) {
                         self?.characters?.append(contentsOf: newCharacters)
                     }
                 } else {
-                    self?.characters = result.data?.characters?.results?.compactMap{ $0 }
+                    self?.characters = result.data?.characters?.results?.compactMap{ $0?.fragments.characterSmall }
                 }
                 self?.totalPage = result.data?.characters?.info?.pages
                 self?.totalCharacters = result.data?.characters?.info?.count

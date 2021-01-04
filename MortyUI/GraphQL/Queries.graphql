@@ -4,26 +4,14 @@ query GetCharacters($page: Int) {
 			pages, count
 		}
 		results {
-			id, name, image,
-			episode {
-				id, name
-			}
+			...CharacterSmall
 		}
 	}
 }
 
 query GetCharacter($id: ID!){
 	character(id: $id) {
-		id, name, image, status, species, type, gender
-		episode {
-			id, name, air_date
-		}
-		location {
-			id, name
-		}
-		origin {
-			id, name
-		}
+		...CharacterFull
 	}
 }
 
@@ -58,6 +46,53 @@ query GetLocations($page: Int) {
 query GetLocation($id: ID!) {
 	location(id: $id) {
 		...LocationDetail
+	}
+}
+
+query GetSearch($name: String!) {
+	characters(page: 1, filter: { name: $name }) {
+		info {
+			count
+		}
+		results {
+			...CharacterSmall
+		}
+	}
+	locations(page: 1, filter: { name: $name }) {
+		info {
+			count
+		}
+		results {
+			...LocationDetail
+		}
+	}
+	episodes(page: 1, filter: { name: $name }) {
+		info {
+			count
+		}
+		results {
+			...EpisodeDetail
+		}
+	}
+}
+
+fragment CharacterFull on Character {
+	id, name, image, status, species, type, gender
+	episode {
+		id, name, air_date
+	}
+	location {
+		id, name
+	}
+	origin {
+		id, name
+	}
+}
+
+fragment CharacterSmall on Character {
+	id, name, image,
+	episode {
+		id, name
 	}
 }
 
