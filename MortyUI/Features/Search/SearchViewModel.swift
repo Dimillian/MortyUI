@@ -7,10 +7,16 @@
 
 import Foundation
 import SwiftUI
+import Combine
 import Apollo
 
 class SearchViewModel: ObservableObject {
     @Published var searchText = "" {
+        willSet {
+            DispatchQueue.main.async {
+                self.searchSubject.send(newValue)
+            }
+        }
         didSet {
             guard searchText != "" else {
                 characters = nil
@@ -18,23 +24,44 @@ class SearchViewModel: ObservableObject {
                 episodes = nil
                 return
             }
-            
-            characters = Array(repeating: CharacterSmall(id: GraphQLID(0), name: nil, image: nil, episode: nil),
-                               count: 3)
-            locations = Array(repeating: LocationDetail(id: GraphQLID(0), name: nil, type: nil, dimension: nil, residents: nil),
-                              count: 3)
-            episodes = Array(repeating: EpisodeDetail(id: GraphQLID(0), name: nil, created: nil, airDate: nil, episode: nil,
-                                                      characters: nil), count: 3)
-            
-            fetchSearch()
         }
     }
     
+    private let searchSubject = PassthroughSubject<String, Never>()
+    private var searchCancellable: AnyCancellable? {
+        didSet {
+            oldValue?.cancel()
+        }
+    }
+        
     @Published var characters: [CharacterSmall]?
     @Published var locations: [LocationDetail]?
     @Published var episodes: [EpisodeDetail]?
     
-    func fetchSearch() {
+    init() {
+        searchCancellable = searchSubject.eraseToAnyPublisher()
+            .map {
+                $0
+            }
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .filter { !$0.isEmpty }
+            .sink(receiveValue: { [weak self] searchText in
+                self?.characters = Array(repeating: CharacterSmall(id: GraphQLID(0), name: nil,
+                                                                   image: nil, episode: nil),
+                                         count: 3)
+                self?.locations = Array(repeating: LocationDetail(id: GraphQLID(0), name: nil,
+                                                                  type: nil, dimension: nil, residents: nil),
+                                        count: 3)
+                self?.episodes = Array(repeating: EpisodeDetail(id: GraphQLID(0), name: nil,
+                                                                created: nil, airDate: nil, episode: nil,
+                                                                characters: nil), count: 3)
+                
+                self?.fetchSearch(search: searchText)
+            })
+    }
+    
+    func fetchSearch(search: String) {
         Network.shared.apollo.fetch(query: GetSearchQuery(name: searchText)) { [weak self] result in
             switch result {
             case .success(let result):
