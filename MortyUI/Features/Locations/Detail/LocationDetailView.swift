@@ -34,7 +34,7 @@ struct LocationDetailView: View {
                             value: location?.type ?? "loading...")
             }.redacted(reason: query.data?.location == nil ? .placeholder : [])
             
-            if let characters = location?.residents?.compactMap{ $0 } {
+            if let characters = location?.residents?.compactMap{ $0 }.filter{ $0.id != nil } {
                 Section(header: Text("Residents")) {
                     ForEach(characters, id: \.id) { character in
                         NavigationLink(
