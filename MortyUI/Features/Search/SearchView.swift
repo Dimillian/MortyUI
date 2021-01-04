@@ -19,21 +19,33 @@ struct SearchView: View {
                 if let characters = viewModel.characters {
                     Section(header: Text("Characters")) {
                         ForEach(characters, id: \.id) { character in
-                            CharactersListRowView(character: character)
+                            NavigationLink(
+                                destination: CharacterDetailView(id: character.id!),
+                                label: {
+                                    CharactersListRowView(character: character)
+                                })
                         }
                     }
                 }
                 if let locations = viewModel.locations {
                     Section(header: Text("Locations")) {
                         ForEach(locations, id: \.id) { location in
-                            LocationsListRowView(location: location)
+                            NavigationLink(
+                                destination: LocationDetailView(id: location.id!),
+                                label: {
+                                    LocationsListRowView(location: location)
+                                })
                         }
                     }
                 }
                 if let episodes = viewModel.episodes {
                     Section(header: Text("Episodes")) {
                         ForEach(episodes, id: \.id) { episode in
-                            EpisodesListRowView(episode: episode)
+                            NavigationLink(
+                                destination: EpisodeDetailView(id: episode.id!),
+                                label: {
+                                    EpisodesListRowView(episode: episode)
+                                })
                         }
                     }
                 }
