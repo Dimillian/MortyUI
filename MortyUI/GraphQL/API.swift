@@ -26,6 +26,8 @@ public final class GetCharactersQuery: GraphQLQuery {
 
   public let operationName: String = "GetCharacters"
 
+  public let operationIdentifier: String? = "2638e39e2809244d03049d31a2a9a139fdf9fc72dbec67bd084260126e9c3c99"
+
   public var queryDocument: String { return operationDefinition.appending("\n" + CharacterSmall.fragmentDefinition) }
 
   public var page: Int?
@@ -172,7 +174,11 @@ public final class GetCharactersQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLFragmentSpread(CharacterSmall.self),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("image", type: .scalar(String.self)),
+            GraphQLField("episode", type: .list(.object(Episode.selections))),
           ]
         }
 
@@ -182,12 +188,57 @@ public final class GetCharactersQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
+        public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil, episode: [Episode?]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image, "episode": episode.flatMap { (value: [Episode?]) -> [ResultMap?] in value.map { (value: Episode?) -> ResultMap? in value.flatMap { (value: Episode) -> ResultMap in value.resultMap } } }])
+        }
+
         public var __typename: String {
           get {
             return resultMap["__typename"]! as! String
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the character.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the character.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// Link to the character's image.
+        /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+        public var image: String? {
+          get {
+            return resultMap["image"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "image")
+          }
+        }
+
+        /// Episodes in which this character appeared.
+        public var episode: [Episode?]? {
+          get {
+            return (resultMap["episode"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Episode?] in value.map { (value: ResultMap?) -> Episode? in value.flatMap { (value: ResultMap) -> Episode in Episode(unsafeResultMap: value) } } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Episode?]) -> [ResultMap?] in value.map { (value: Episode?) -> ResultMap? in value.flatMap { (value: Episode) -> ResultMap in value.resultMap } } }, forKey: "episode")
           }
         }
 
@@ -216,6 +267,57 @@ public final class GetCharactersQuery: GraphQLQuery {
             }
           }
         }
+
+        public struct Episode: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Episode"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("id", type: .scalar(GraphQLID.self)),
+              GraphQLField("name", type: .scalar(String.self)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(id: GraphQLID? = nil, name: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Episode", "id": id, "name": name])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The id of the episode.
+          public var id: GraphQLID? {
+            get {
+              return resultMap["id"] as? GraphQLID
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          /// The name of the episode.
+          public var name: String? {
+            get {
+              return resultMap["name"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
+            }
+          }
+        }
       }
     }
   }
@@ -234,6 +336,8 @@ public final class GetCharacterQuery: GraphQLQuery {
     """
 
   public let operationName: String = "GetCharacter"
+
+  public let operationIdentifier: String? = "8115a5c0478fe3260388181ca5fdc3a1287796eb8046731ba14cca133c816420"
 
   public var queryDocument: String { return operationDefinition.appending("\n" + CharacterFull.fragmentDefinition) }
 
@@ -282,7 +386,17 @@ public final class GetCharacterQuery: GraphQLQuery {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLFragmentSpread(CharacterFull.self),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .scalar(GraphQLID.self)),
+          GraphQLField("name", type: .scalar(String.self)),
+          GraphQLField("image", type: .scalar(String.self)),
+          GraphQLField("status", type: .scalar(String.self)),
+          GraphQLField("species", type: .scalar(String.self)),
+          GraphQLField("type", type: .scalar(String.self)),
+          GraphQLField("gender", type: .scalar(String.self)),
+          GraphQLField("episode", type: .list(.object(Episode.selections))),
+          GraphQLField("location", type: .object(Location.selections)),
+          GraphQLField("origin", type: .object(Origin.selections)),
         ]
       }
 
@@ -292,12 +406,117 @@ public final class GetCharacterQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
+      public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil, status: String? = nil, species: String? = nil, type: String? = nil, gender: String? = nil, episode: [Episode?]? = nil, location: Location? = nil, origin: Origin? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image, "status": status, "species": species, "type": type, "gender": gender, "episode": episode.flatMap { (value: [Episode?]) -> [ResultMap?] in value.map { (value: Episode?) -> ResultMap? in value.flatMap { (value: Episode) -> ResultMap in value.resultMap } } }, "location": location.flatMap { (value: Location) -> ResultMap in value.resultMap }, "origin": origin.flatMap { (value: Origin) -> ResultMap in value.resultMap }])
+      }
+
       public var __typename: String {
         get {
           return resultMap["__typename"]! as! String
         }
         set {
           resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The id of the character.
+      public var id: GraphQLID? {
+        get {
+          return resultMap["id"] as? GraphQLID
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      /// The name of the character.
+      public var name: String? {
+        get {
+          return resultMap["name"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "name")
+        }
+      }
+
+      /// Link to the character's image.
+      /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+      public var image: String? {
+        get {
+          return resultMap["image"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "image")
+        }
+      }
+
+      /// The status of the character ('Alive', 'Dead' or 'unknown').
+      public var status: String? {
+        get {
+          return resultMap["status"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "status")
+        }
+      }
+
+      /// The species of the character.
+      public var species: String? {
+        get {
+          return resultMap["species"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "species")
+        }
+      }
+
+      /// The type or subspecies of the character.
+      public var type: String? {
+        get {
+          return resultMap["type"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "type")
+        }
+      }
+
+      /// The gender of the character ('Female', 'Male', 'Genderless' or 'unknown').
+      public var gender: String? {
+        get {
+          return resultMap["gender"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "gender")
+        }
+      }
+
+      /// Episodes in which this character appeared.
+      public var episode: [Episode?]? {
+        get {
+          return (resultMap["episode"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Episode?] in value.map { (value: ResultMap?) -> Episode? in value.flatMap { (value: ResultMap) -> Episode in Episode(unsafeResultMap: value) } } }
+        }
+        set {
+          resultMap.updateValue(newValue.flatMap { (value: [Episode?]) -> [ResultMap?] in value.map { (value: Episode?) -> ResultMap? in value.flatMap { (value: Episode) -> ResultMap in value.resultMap } } }, forKey: "episode")
+        }
+      }
+
+      /// The character's last known location
+      public var location: Location? {
+        get {
+          return (resultMap["location"] as? ResultMap).flatMap { Location(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "location")
+        }
+      }
+
+      /// The character's origin location
+      public var origin: Origin? {
+        get {
+          return (resultMap["origin"] as? ResultMap).flatMap { Origin(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "origin")
         }
       }
 
@@ -326,6 +545,170 @@ public final class GetCharacterQuery: GraphQLQuery {
           }
         }
       }
+
+      public struct Episode: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Episode"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("air_date", type: .scalar(String.self)),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: GraphQLID? = nil, name: String? = nil, airDate: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Episode", "id": id, "name": name, "air_date": airDate])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the episode.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the episode.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The air date of the episode.
+        public var airDate: String? {
+          get {
+            return resultMap["air_date"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "air_date")
+          }
+        }
+      }
+
+      public struct Location: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Location"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: GraphQLID? = nil, name: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Location", "id": id, "name": name])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the location.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the location.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+      }
+
+      public struct Origin: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Location"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: GraphQLID? = nil, name: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Location", "id": id, "name": name])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the location.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the location.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+      }
     }
   }
 }
@@ -351,6 +734,8 @@ public final class GetEpisodesQuery: GraphQLQuery {
     """
 
   public let operationName: String = "GetEpisodes"
+
+  public let operationIdentifier: String? = "d8dc6cda60db1bb486b681d92a9d854e1f6350c7cc73e4fdc86dc7f57619c788"
 
   public var queryDocument: String { return operationDefinition.appending("\n" + EpisodeDetail.fragmentDefinition) }
 
@@ -498,7 +883,13 @@ public final class GetEpisodesQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLFragmentSpread(EpisodeDetail.self),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("created", type: .scalar(String.self)),
+            GraphQLField("air_date", type: .scalar(String.self)),
+            GraphQLField("episode", type: .scalar(String.self)),
+            GraphQLField("characters", type: .list(.object(Character.selections))),
           ]
         }
 
@@ -508,12 +899,76 @@ public final class GetEpisodesQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
+        public init(id: GraphQLID? = nil, name: String? = nil, created: String? = nil, airDate: String? = nil, episode: String? = nil, characters: [Character?]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Episode", "id": id, "name": name, "created": created, "air_date": airDate, "episode": episode, "characters": characters.flatMap { (value: [Character?]) -> [ResultMap?] in value.map { (value: Character?) -> ResultMap? in value.flatMap { (value: Character) -> ResultMap in value.resultMap } } }])
+        }
+
         public var __typename: String {
           get {
             return resultMap["__typename"]! as! String
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the episode.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the episode.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// Time at which the episode was created in the database.
+        public var created: String? {
+          get {
+            return resultMap["created"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "created")
+          }
+        }
+
+        /// The air date of the episode.
+        public var airDate: String? {
+          get {
+            return resultMap["air_date"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "air_date")
+          }
+        }
+
+        /// The code of the episode.
+        public var episode: String? {
+          get {
+            return resultMap["episode"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "episode")
+          }
+        }
+
+        /// List of characters who have been seen in the episode.
+        public var characters: [Character?]? {
+          get {
+            return (resultMap["characters"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Character?] in value.map { (value: ResultMap?) -> Character? in value.flatMap { (value: ResultMap) -> Character in Character(unsafeResultMap: value) } } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Character?]) -> [ResultMap?] in value.map { (value: Character?) -> ResultMap? in value.flatMap { (value: Character) -> ResultMap in value.resultMap } } }, forKey: "characters")
           }
         }
 
@@ -542,6 +997,69 @@ public final class GetEpisodesQuery: GraphQLQuery {
             }
           }
         }
+
+        public struct Character: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Character"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("id", type: .scalar(GraphQLID.self)),
+              GraphQLField("name", type: .scalar(String.self)),
+              GraphQLField("image", type: .scalar(String.self)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The id of the character.
+          public var id: GraphQLID? {
+            get {
+              return resultMap["id"] as? GraphQLID
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          /// The name of the character.
+          public var name: String? {
+            get {
+              return resultMap["name"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
+            }
+          }
+
+          /// Link to the character's image.
+          /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+          public var image: String? {
+            get {
+              return resultMap["image"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "image")
+            }
+          }
+        }
       }
     }
   }
@@ -560,6 +1078,8 @@ public final class GetEpisodeQuery: GraphQLQuery {
     """
 
   public let operationName: String = "GetEpisode"
+
+  public let operationIdentifier: String? = "75005e8d842c61423597c65cb3e95d85d20aded325d99a10dc0e1abc94d92d76"
 
   public var queryDocument: String { return operationDefinition.appending("\n" + EpisodeDetail.fragmentDefinition) }
 
@@ -608,7 +1128,13 @@ public final class GetEpisodeQuery: GraphQLQuery {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLFragmentSpread(EpisodeDetail.self),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .scalar(GraphQLID.self)),
+          GraphQLField("name", type: .scalar(String.self)),
+          GraphQLField("created", type: .scalar(String.self)),
+          GraphQLField("air_date", type: .scalar(String.self)),
+          GraphQLField("episode", type: .scalar(String.self)),
+          GraphQLField("characters", type: .list(.object(Character.selections))),
         ]
       }
 
@@ -618,12 +1144,76 @@ public final class GetEpisodeQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
+      public init(id: GraphQLID? = nil, name: String? = nil, created: String? = nil, airDate: String? = nil, episode: String? = nil, characters: [Character?]? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Episode", "id": id, "name": name, "created": created, "air_date": airDate, "episode": episode, "characters": characters.flatMap { (value: [Character?]) -> [ResultMap?] in value.map { (value: Character?) -> ResultMap? in value.flatMap { (value: Character) -> ResultMap in value.resultMap } } }])
+      }
+
       public var __typename: String {
         get {
           return resultMap["__typename"]! as! String
         }
         set {
           resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The id of the episode.
+      public var id: GraphQLID? {
+        get {
+          return resultMap["id"] as? GraphQLID
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      /// The name of the episode.
+      public var name: String? {
+        get {
+          return resultMap["name"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "name")
+        }
+      }
+
+      /// Time at which the episode was created in the database.
+      public var created: String? {
+        get {
+          return resultMap["created"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "created")
+        }
+      }
+
+      /// The air date of the episode.
+      public var airDate: String? {
+        get {
+          return resultMap["air_date"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "air_date")
+        }
+      }
+
+      /// The code of the episode.
+      public var episode: String? {
+        get {
+          return resultMap["episode"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "episode")
+        }
+      }
+
+      /// List of characters who have been seen in the episode.
+      public var characters: [Character?]? {
+        get {
+          return (resultMap["characters"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Character?] in value.map { (value: ResultMap?) -> Character? in value.flatMap { (value: ResultMap) -> Character in Character(unsafeResultMap: value) } } }
+        }
+        set {
+          resultMap.updateValue(newValue.flatMap { (value: [Character?]) -> [ResultMap?] in value.map { (value: Character?) -> ResultMap? in value.flatMap { (value: Character) -> ResultMap in value.resultMap } } }, forKey: "characters")
         }
       }
 
@@ -652,6 +1242,69 @@ public final class GetEpisodeQuery: GraphQLQuery {
           }
         }
       }
+
+      public struct Character: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Character"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("image", type: .scalar(String.self)),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the character.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the character.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// Link to the character's image.
+        /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+        public var image: String? {
+          get {
+            return resultMap["image"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "image")
+          }
+        }
+      }
     }
   }
 }
@@ -677,6 +1330,8 @@ public final class GetLocationsQuery: GraphQLQuery {
     """
 
   public let operationName: String = "GetLocations"
+
+  public let operationIdentifier: String? = "bf026c3686b572b369a4d872270fba48814a8d2ab7cb385c49fdbb2b3301f1d1"
 
   public var queryDocument: String { return operationDefinition.appending("\n" + LocationDetail.fragmentDefinition) }
 
@@ -824,7 +1479,12 @@ public final class GetLocationsQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLFragmentSpread(LocationDetail.self),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("type", type: .scalar(String.self)),
+            GraphQLField("dimension", type: .scalar(String.self)),
+            GraphQLField("residents", type: .list(.object(Resident.selections))),
           ]
         }
 
@@ -834,12 +1494,66 @@ public final class GetLocationsQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
+        public init(id: GraphQLID? = nil, name: String? = nil, type: String? = nil, dimension: String? = nil, residents: [Resident?]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Location", "id": id, "name": name, "type": type, "dimension": dimension, "residents": residents.flatMap { (value: [Resident?]) -> [ResultMap?] in value.map { (value: Resident?) -> ResultMap? in value.flatMap { (value: Resident) -> ResultMap in value.resultMap } } }])
+        }
+
         public var __typename: String {
           get {
             return resultMap["__typename"]! as! String
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the location.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the location.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The type of the location.
+        public var type: String? {
+          get {
+            return resultMap["type"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "type")
+          }
+        }
+
+        /// The dimension in which the location is located.
+        public var dimension: String? {
+          get {
+            return resultMap["dimension"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "dimension")
+          }
+        }
+
+        /// List of characters who have been last seen in the location.
+        public var residents: [Resident?]? {
+          get {
+            return (resultMap["residents"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Resident?] in value.map { (value: ResultMap?) -> Resident? in value.flatMap { (value: ResultMap) -> Resident in Resident(unsafeResultMap: value) } } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Resident?]) -> [ResultMap?] in value.map { (value: Resident?) -> ResultMap? in value.flatMap { (value: Resident) -> ResultMap in value.resultMap } } }, forKey: "residents")
           }
         }
 
@@ -868,6 +1582,69 @@ public final class GetLocationsQuery: GraphQLQuery {
             }
           }
         }
+
+        public struct Resident: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Character"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("id", type: .scalar(GraphQLID.self)),
+              GraphQLField("name", type: .scalar(String.self)),
+              GraphQLField("image", type: .scalar(String.self)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The id of the character.
+          public var id: GraphQLID? {
+            get {
+              return resultMap["id"] as? GraphQLID
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          /// The name of the character.
+          public var name: String? {
+            get {
+              return resultMap["name"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
+            }
+          }
+
+          /// Link to the character's image.
+          /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+          public var image: String? {
+            get {
+              return resultMap["image"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "image")
+            }
+          }
+        }
       }
     }
   }
@@ -886,6 +1663,8 @@ public final class GetLocationQuery: GraphQLQuery {
     """
 
   public let operationName: String = "GetLocation"
+
+  public let operationIdentifier: String? = "685aeff3a140a7c5828baceb8b920f4692b17944d8f645494adb5099f40366d7"
 
   public var queryDocument: String { return operationDefinition.appending("\n" + LocationDetail.fragmentDefinition) }
 
@@ -934,7 +1713,12 @@ public final class GetLocationQuery: GraphQLQuery {
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLFragmentSpread(LocationDetail.self),
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .scalar(GraphQLID.self)),
+          GraphQLField("name", type: .scalar(String.self)),
+          GraphQLField("type", type: .scalar(String.self)),
+          GraphQLField("dimension", type: .scalar(String.self)),
+          GraphQLField("residents", type: .list(.object(Resident.selections))),
         ]
       }
 
@@ -944,12 +1728,66 @@ public final class GetLocationQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
+      public init(id: GraphQLID? = nil, name: String? = nil, type: String? = nil, dimension: String? = nil, residents: [Resident?]? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Location", "id": id, "name": name, "type": type, "dimension": dimension, "residents": residents.flatMap { (value: [Resident?]) -> [ResultMap?] in value.map { (value: Resident?) -> ResultMap? in value.flatMap { (value: Resident) -> ResultMap in value.resultMap } } }])
+      }
+
       public var __typename: String {
         get {
           return resultMap["__typename"]! as! String
         }
         set {
           resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// The id of the location.
+      public var id: GraphQLID? {
+        get {
+          return resultMap["id"] as? GraphQLID
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      /// The name of the location.
+      public var name: String? {
+        get {
+          return resultMap["name"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "name")
+        }
+      }
+
+      /// The type of the location.
+      public var type: String? {
+        get {
+          return resultMap["type"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "type")
+        }
+      }
+
+      /// The dimension in which the location is located.
+      public var dimension: String? {
+        get {
+          return resultMap["dimension"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "dimension")
+        }
+      }
+
+      /// List of characters who have been last seen in the location.
+      public var residents: [Resident?]? {
+        get {
+          return (resultMap["residents"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Resident?] in value.map { (value: ResultMap?) -> Resident? in value.flatMap { (value: ResultMap) -> Resident in Resident(unsafeResultMap: value) } } }
+        }
+        set {
+          resultMap.updateValue(newValue.flatMap { (value: [Resident?]) -> [ResultMap?] in value.map { (value: Resident?) -> ResultMap? in value.flatMap { (value: Resident) -> ResultMap in value.resultMap } } }, forKey: "residents")
         }
       }
 
@@ -975,6 +1813,69 @@ public final class GetLocationQuery: GraphQLQuery {
           }
           set {
             resultMap += newValue.resultMap
+          }
+        }
+      }
+
+      public struct Resident: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["Character"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("image", type: .scalar(String.self)),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the character.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the character.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// Link to the character's image.
+        /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+        public var image: String? {
+          get {
+            return resultMap["image"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "image")
           }
         }
       }
@@ -1024,6 +1925,8 @@ public final class GetSearchQuery: GraphQLQuery {
     """
 
   public let operationName: String = "GetSearch"
+
+  public let operationIdentifier: String? = "c6016673c2e6ac38869749d9a4790551b4a90d4f88548201bb7ffa9f5c46de58"
 
   public var queryDocument: String { return operationDefinition.appending("\n" + CharacterSmall.fragmentDefinition).appending("\n" + LocationDetail.fragmentDefinition).appending("\n" + EpisodeDetail.fragmentDefinition) }
 
@@ -1182,7 +2085,11 @@ public final class GetSearchQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLFragmentSpread(CharacterSmall.self),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("image", type: .scalar(String.self)),
+            GraphQLField("episode", type: .list(.object(Episode.selections))),
           ]
         }
 
@@ -1192,12 +2099,57 @@ public final class GetSearchQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
+        public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil, episode: [Episode?]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image, "episode": episode.flatMap { (value: [Episode?]) -> [ResultMap?] in value.map { (value: Episode?) -> ResultMap? in value.flatMap { (value: Episode) -> ResultMap in value.resultMap } } }])
+        }
+
         public var __typename: String {
           get {
             return resultMap["__typename"]! as! String
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the character.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the character.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// Link to the character's image.
+        /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+        public var image: String? {
+          get {
+            return resultMap["image"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "image")
+          }
+        }
+
+        /// Episodes in which this character appeared.
+        public var episode: [Episode?]? {
+          get {
+            return (resultMap["episode"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Episode?] in value.map { (value: ResultMap?) -> Episode? in value.flatMap { (value: ResultMap) -> Episode in Episode(unsafeResultMap: value) } } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Episode?]) -> [ResultMap?] in value.map { (value: Episode?) -> ResultMap? in value.flatMap { (value: Episode) -> ResultMap in value.resultMap } } }, forKey: "episode")
           }
         }
 
@@ -1223,6 +2175,57 @@ public final class GetSearchQuery: GraphQLQuery {
             }
             set {
               resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Episode: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Episode"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("id", type: .scalar(GraphQLID.self)),
+              GraphQLField("name", type: .scalar(String.self)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(id: GraphQLID? = nil, name: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Episode", "id": id, "name": name])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The id of the episode.
+          public var id: GraphQLID? {
+            get {
+              return resultMap["id"] as? GraphQLID
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          /// The name of the episode.
+          public var name: String? {
+            get {
+              return resultMap["name"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
             }
           }
         }
@@ -1323,7 +2326,12 @@ public final class GetSearchQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLFragmentSpread(LocationDetail.self),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("type", type: .scalar(String.self)),
+            GraphQLField("dimension", type: .scalar(String.self)),
+            GraphQLField("residents", type: .list(.object(Resident.selections))),
           ]
         }
 
@@ -1333,12 +2341,66 @@ public final class GetSearchQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
+        public init(id: GraphQLID? = nil, name: String? = nil, type: String? = nil, dimension: String? = nil, residents: [Resident?]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Location", "id": id, "name": name, "type": type, "dimension": dimension, "residents": residents.flatMap { (value: [Resident?]) -> [ResultMap?] in value.map { (value: Resident?) -> ResultMap? in value.flatMap { (value: Resident) -> ResultMap in value.resultMap } } }])
+        }
+
         public var __typename: String {
           get {
             return resultMap["__typename"]! as! String
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the location.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the location.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// The type of the location.
+        public var type: String? {
+          get {
+            return resultMap["type"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "type")
+          }
+        }
+
+        /// The dimension in which the location is located.
+        public var dimension: String? {
+          get {
+            return resultMap["dimension"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "dimension")
+          }
+        }
+
+        /// List of characters who have been last seen in the location.
+        public var residents: [Resident?]? {
+          get {
+            return (resultMap["residents"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Resident?] in value.map { (value: ResultMap?) -> Resident? in value.flatMap { (value: ResultMap) -> Resident in Resident(unsafeResultMap: value) } } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Resident?]) -> [ResultMap?] in value.map { (value: Resident?) -> ResultMap? in value.flatMap { (value: Resident) -> ResultMap in value.resultMap } } }, forKey: "residents")
           }
         }
 
@@ -1364,6 +2426,69 @@ public final class GetSearchQuery: GraphQLQuery {
             }
             set {
               resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Resident: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Character"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("id", type: .scalar(GraphQLID.self)),
+              GraphQLField("name", type: .scalar(String.self)),
+              GraphQLField("image", type: .scalar(String.self)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The id of the character.
+          public var id: GraphQLID? {
+            get {
+              return resultMap["id"] as? GraphQLID
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          /// The name of the character.
+          public var name: String? {
+            get {
+              return resultMap["name"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
+            }
+          }
+
+          /// Link to the character's image.
+          /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+          public var image: String? {
+            get {
+              return resultMap["image"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "image")
             }
           }
         }
@@ -1464,7 +2589,13 @@ public final class GetSearchQuery: GraphQLQuery {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLFragmentSpread(EpisodeDetail.self),
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("id", type: .scalar(GraphQLID.self)),
+            GraphQLField("name", type: .scalar(String.self)),
+            GraphQLField("created", type: .scalar(String.self)),
+            GraphQLField("air_date", type: .scalar(String.self)),
+            GraphQLField("episode", type: .scalar(String.self)),
+            GraphQLField("characters", type: .list(.object(Character.selections))),
           ]
         }
 
@@ -1474,12 +2605,76 @@ public final class GetSearchQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
+        public init(id: GraphQLID? = nil, name: String? = nil, created: String? = nil, airDate: String? = nil, episode: String? = nil, characters: [Character?]? = nil) {
+          self.init(unsafeResultMap: ["__typename": "Episode", "id": id, "name": name, "created": created, "air_date": airDate, "episode": episode, "characters": characters.flatMap { (value: [Character?]) -> [ResultMap?] in value.map { (value: Character?) -> ResultMap? in value.flatMap { (value: Character) -> ResultMap in value.resultMap } } }])
+        }
+
         public var __typename: String {
           get {
             return resultMap["__typename"]! as! String
           }
           set {
             resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        /// The id of the episode.
+        public var id: GraphQLID? {
+          get {
+            return resultMap["id"] as? GraphQLID
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        /// The name of the episode.
+        public var name: String? {
+          get {
+            return resultMap["name"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        /// Time at which the episode was created in the database.
+        public var created: String? {
+          get {
+            return resultMap["created"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "created")
+          }
+        }
+
+        /// The air date of the episode.
+        public var airDate: String? {
+          get {
+            return resultMap["air_date"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "air_date")
+          }
+        }
+
+        /// The code of the episode.
+        public var episode: String? {
+          get {
+            return resultMap["episode"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "episode")
+          }
+        }
+
+        /// List of characters who have been seen in the episode.
+        public var characters: [Character?]? {
+          get {
+            return (resultMap["characters"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [Character?] in value.map { (value: ResultMap?) -> Character? in value.flatMap { (value: ResultMap) -> Character in Character(unsafeResultMap: value) } } }
+          }
+          set {
+            resultMap.updateValue(newValue.flatMap { (value: [Character?]) -> [ResultMap?] in value.map { (value: Character?) -> ResultMap? in value.flatMap { (value: Character) -> ResultMap in value.resultMap } } }, forKey: "characters")
           }
         }
 
@@ -1505,6 +2700,69 @@ public final class GetSearchQuery: GraphQLQuery {
             }
             set {
               resultMap += newValue.resultMap
+            }
+          }
+        }
+
+        public struct Character: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Character"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("id", type: .scalar(GraphQLID.self)),
+              GraphQLField("name", type: .scalar(String.self)),
+              GraphQLField("image", type: .scalar(String.self)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(id: GraphQLID? = nil, name: String? = nil, image: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Character", "id": id, "name": name, "image": image])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// The id of the character.
+          public var id: GraphQLID? {
+            get {
+              return resultMap["id"] as? GraphQLID
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "id")
+            }
+          }
+
+          /// The name of the character.
+          public var name: String? {
+            get {
+              return resultMap["name"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "name")
+            }
+          }
+
+          /// Link to the character's image.
+          /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+          public var image: String? {
+            get {
+              return resultMap["image"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "image")
             }
           }
         }

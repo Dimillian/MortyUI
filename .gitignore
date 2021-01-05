@@ -89,3 +89,5 @@ fastlane/test_output
 
 iOSInjectionProject/
 .DS_Store
+MortyUI/GraphQL/apollo/
+MortyUI/GraphQL/operationIDs.json

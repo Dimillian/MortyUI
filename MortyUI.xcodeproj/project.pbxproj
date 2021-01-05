@@ -51,6 +51,7 @@
 		69C794552590ADDB008EF633 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		69C794712590CB7A008EF633 /* CharactersListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListRowView.swift; sourceTree = "<group>"; };
 		69C794762590D541008EF633 /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
+		69EF672125A4C8710009F5D1 /* Codegen */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Codegen; sourceTree = "<group>"; };
 		69F9DCE7258CB21300F99396 /* MortyUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MortyUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69F9DCEA258CB21300F99396 /* MortyUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MortyUIApp.swift; sourceTree = "<group>"; };
 		69F9DCEE258CB21500F99396 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -161,6 +162,7 @@
 		69F9DCDE258CB21300F99396 = {
 			isa = PBXGroup;
 			children = (
+				69EF672125A4C8710009F5D1 /* Codegen */,
 				69F9DCE9258CB21300F99396 /* MortyUI */,
 				69F9DCE8258CB21300F99396 /* Products */,
 				69A120112590E1E80073E76F /* Frameworks */,
@@ -266,7 +268,6 @@
 				69F9DCE3258CB21300F99396 /* Sources */,
 				69F9DCE4258CB21300F99396 /* Frameworks */,
 				69F9DCE5258CB21300F99396 /* Resources */,
-				69F9DD04258CB43200F99396 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -330,26 +331,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		69F9DD04258CB43200F99396 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DERIVED_DATA_CANDIDATE=\"${BUILD_ROOT}\"\nwhile ! [ -d \"${DERIVED_DATA_CANDIDATE}/SourcePackages\" ]; do\nDERIVED_DATA_CANDIDATE=\"$(dirname \"${DERIVED_DATA_CANDIDATE}\")\"\ndone\nSCRIPT_PATH=\"${DERIVED_DATA_CANDIDATE}/SourcePackages/checkouts/apollo-ios/scripts\"\ncd \"${SRCROOT}/${TARGET_NAME}/GraphQL\"\n\"${SCRIPT_PATH}\"/run-bundled-codegen.sh codegen:generate --target=swift --includes=./**/*.graphql --localSchemaFile=\"schema.json\" API.swift\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		69F9DCE3258CB21300F99396 /* Sources */ = {
