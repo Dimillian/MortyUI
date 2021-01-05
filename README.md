@@ -33,6 +33,7 @@ To not slow the build process, this project is coming with a Swift package comma
 It's not executed as part of the build process, if you modify the queries and wish to regenerate the API.swift file you'll need to:
 
 `cd Codegen `
+
 `swift run Codegen codegen`
 
 and to download the schema
