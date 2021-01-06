@@ -21,6 +21,7 @@
 		69C794562590ADDB008EF633 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C794552590ADDB008EF633 /* Color.swift */; };
 		69C794722590CB7A008EF633 /* CharactersListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C794712590CB7A008EF633 /* CharactersListRowView.swift */; };
 		69C794772590D541008EF633 /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C794762590D541008EF633 /* EpisodeDetailView.swift */; };
+		69EF672C25A5B1E00009F5D1 /* ApolloSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 69EF672B25A5B1E00009F5D1 /* ApolloSQLite */; };
 		69F9DCEB258CB21300F99396 /* MortyUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9DCEA258CB21300F99396 /* MortyUIApp.swift */; };
 		69F9DCEF258CB21500F99396 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69F9DCEE258CB21500F99396 /* Assets.xcassets */; };
 		69F9DCF2258CB21500F99396 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69F9DCF1258CB21500F99396 /* Preview Assets.xcassets */; };
@@ -74,6 +75,7 @@
 			files = (
 				69F9DD14258E1F1600F99396 /* KingfisherSwiftUIStatic in Frameworks */,
 				69F9DCFC258CB2DF00F99396 /* Apollo in Frameworks */,
+				69EF672C25A5B1E00009F5D1 /* ApolloSQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +279,7 @@
 			packageProductDependencies = (
 				69F9DCFB258CB2DF00F99396 /* Apollo */,
 				69F9DD13258E1F1600F99396 /* KingfisherSwiftUIStatic */,
+				69EF672B25A5B1E00009F5D1 /* ApolloSQLite */,
 			);
 			productName = MortyUI;
 			productReference = 69F9DCE7258CB21300F99396 /* MortyUI.app */;
@@ -567,6 +570,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		69EF672B25A5B1E00009F5D1 /* ApolloSQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69F9DCFA258CB2DF00F99396 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloSQLite;
+		};
 		69F9DCFB258CB2DF00F99396 /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 69F9DCFA258CB2DF00F99396 /* XCRemoteSwiftPackageReference "apollo-ios" */;
