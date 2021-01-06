@@ -62,7 +62,8 @@ class SearchViewModel: ObservableObject {
     }
     
     func fetchSearch(search: String) {
-        Network.shared.apollo.fetch(query: GetSearchQuery(name: searchText)) { [weak self] result in
+        Network.shared.apollo.fetch(query: GetSearchQuery(name: searchText),
+                                    cachePolicy: .fetchIgnoringCacheCompletely) { [weak self] result in
             switch result {
             case .success(let result):
                 self?.characters = result.data?.characters?.results?.compactMap{ $0?.fragments.characterSmall }.prefix(5).map{ $0}
