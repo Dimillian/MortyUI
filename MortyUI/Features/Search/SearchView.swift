@@ -14,7 +14,21 @@ struct SearchView: View {
         NavigationView {
             List {
                 Section {
-                    TextField("Search", text: $viewModel.searchText)
+                    HStack {
+                        TextField("Search", text: $viewModel.searchText)
+                        if !viewModel.searchText.isEmpty {
+                            Button(action: {
+                                viewModel.searchText = ""
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                                                to: nil,
+                                                                from: nil,
+                                                                for: nil)
+                            }, label: {
+                                Text("Cancel")
+                                    .foregroundColor(.blue)
+                            })
+                        }
+                    }
                 }
                 if let characters = viewModel.characters {
                     Section(header: Text("Characters")) {

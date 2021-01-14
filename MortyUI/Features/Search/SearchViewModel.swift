@@ -55,7 +55,8 @@ class SearchViewModel: ObservableObject {
                                         count: 3)
                 self?.episodes = Array(repeating: EpisodeDetail(id: GraphQLID(0), name: nil,
                                                                 created: nil, airDate: nil, episode: nil,
-                                                                characters: nil), count: 3)
+                                                                characters: nil),
+                                       count: 3)
                 
                 self?.fetchSearch(search: searchText)
             })
