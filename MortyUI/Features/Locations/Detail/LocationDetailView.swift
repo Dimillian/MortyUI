@@ -22,7 +22,7 @@ struct LocationDetailView: View {
     
     var body: some View {
         List {
-            Section(header: Text("Info")) {
+          Section(header: Text("Info").unredacted()) {
                 InfoRowView(label: "Name",
                             icon: "info",
                             value: location?.name ?? "loading...")
