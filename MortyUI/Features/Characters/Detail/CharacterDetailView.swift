@@ -45,7 +45,7 @@ struct CharacterDetailView: View {
             locationSection
 
             if let episodes = character?.episode?.compactMap{ $0 } {
-                Section(header: Text("Episodes")) {
+              Section(header: Text("Episodes").unredacted()) {
                     ForEach(episodes, id: \.id) { episode in
                         NavigationLink(
                             destination: EpisodeDetailView(id: episode.id!),
@@ -68,7 +68,7 @@ struct CharacterDetailView: View {
     }
     
     private var infoSection: some View {
-        Section(header: Text("Info"),
+      Section(header: Text("Info").unredacted(),
                 content: {
                     InfoRowView(label: "Species",
                                 icon: "hare",
@@ -84,7 +84,7 @@ struct CharacterDetailView: View {
     }
     
     private var locationSection: some View {
-        Section(header: Text("Location")) {
+      Section(header: Text("Location").unredacted()) {
             NavigationLink(
                 destination:
                     LocationDetailView(id: character?.location?.id ?? GraphQLID(0)),

@@ -12,8 +12,8 @@ struct SearchView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                Section {
+          List {
+            Section {
                     HStack {
                         TextField("Search", text: $viewModel.searchText)
                         if !viewModel.searchText.isEmpty {
@@ -42,7 +42,7 @@ struct SearchView: View {
                     }
                 }
                 if let locations = viewModel.locations {
-                    Section(header: Text("Locations")) {
+                  Section(header: Text("Locations")) {
                         ForEach(locations, id: \.id) { location in
                             NavigationLink(
                                 destination: LocationDetailView(id: location.id!),
@@ -63,7 +63,9 @@ struct SearchView: View {
                         }
                     }
                 }
-            }.navigationTitle("Search")
+            }
+          .navigationTitle("Search")
+          .listStyle(GroupedListStyle())
         }
     }
 }
