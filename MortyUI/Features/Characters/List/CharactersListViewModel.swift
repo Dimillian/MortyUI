@@ -41,7 +41,11 @@ class CharacterListViewModel: ObservableObject {
             case .success(let result):
                 if fetchedPage > 1 {
                     if let newCharacters = result.data?.characters?.results?.compactMap({ $0?.fragments.characterSmall }) {
-                        self?.characters?.append(contentsOf: newCharacters)
+                        newCharacters.filter { new in
+                            self?.characters?.contains(where: { $0.id == new.id }) == false
+                        }.forEach {
+                            self?.characters?.append($0)
+                        }
                     }
                 } else {
                     self?.characters = result.data?.characters?.results?.compactMap{ $0?.fragments.characterSmall }
